@@ -34,7 +34,9 @@
     if (data && ![mutableHeaders objectForKey:kMSHeaderContentTypeKey]) {
       mutableHeaders[kMSHeaderContentTypeKey] = kMSAppCenterContentType;
     }
-    _data = data;
+    if (data) {
+      _data = data;
+    }
     _headers = mutableHeaders;
   }
   return self;

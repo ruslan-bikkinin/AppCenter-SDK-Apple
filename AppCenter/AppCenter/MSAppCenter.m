@@ -323,8 +323,12 @@ static const long kMSMinUpperSizeLimitInBytes = 24 * 1024;
 }
 
 - (void)start:(NSString *)secretString withServices:(NSArray<Class> *)services fromApplication:(BOOL)fromApplication {
-  NSString *appSecret = [MSUtility appSecretFrom:secretString];
-  NSString *transmissionTargetToken = [MSUtility transmissionTargetTokenFrom:secretString];
+  NSString *appSecret;
+  NSString *transmissionTargetToken;
+  if (secretString) {
+    appSecret = [MSUtility appSecretFrom:secretString];
+    transmissionTargetToken = [MSUtility transmissionTargetTokenFrom:secretString];
+  }
   BOOL configured = [self configureWithAppSecret:appSecret transmissionTargetToken:transmissionTargetToken fromApplication:fromApplication];
   if (configured && services) {
     [self startServices:services withAppSecret:appSecret transmissionTargetToken:transmissionTargetToken fromApplication:fromApplication];

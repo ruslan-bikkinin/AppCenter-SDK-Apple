@@ -80,18 +80,17 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
 #pragma clang diagnostic ignored "-Wnullable-to-nonnull-conversion"
 
 + (instancetype)reachabilityWithHostName:(NSString *)hostName {
-  MS_Reachability *returnValue = NULL;
   SCNetworkReachabilityRef reachability =
       SCNetworkReachabilityCreateWithName(NULL, [hostName UTF8String]);
-  if (reachability != NULL) {
-    returnValue = [[MS_Reachability alloc] init];
-    if (returnValue != NULL) {
+  if (reachability) {
+    MS_Reachability *returnValue = [[MS_Reachability alloc] init];
+    if (returnValue) {
       returnValue.reachabilityRef = reachability;
-    } else {
-      CFRelease(reachability);
     }
+      CFAutorelease(reachability);
   }
-  return returnValue;
+    
+    return nil;
 }
 
 #pragma clang diagnostic pop
@@ -104,9 +103,8 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
     returnValue = [[MS_Reachability alloc] init];
     if (returnValue != NULL) {
       returnValue.reachabilityRef = reachability;
-    } else {
-      CFRelease(reachability);
     }
+      CFAutorelease(reachability);
   }
   return returnValue;
 }
