@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * Request body.
  */
-@property(nonatomic) NSData *data;
+@property(nonatomic, nullable) NSData *data;
 
 /**
  * Request headers.

@@ -41,7 +41,7 @@ enum StartupMode { appCenter, oneCollector, both, none, skip };
 
   // Set max storage size.
   NSNumber *storageMaxSize = [[NSUserDefaults standardUserDefaults] objectForKey:kMSStorageMaxSizeKey];
-  if (storageMaxSize.boolValue) {
+  if (storageMaxSize != nil) {
     [MSAppCenter setMaxStorageSize:storageMaxSize.integerValue
                  completionHandler:^(BOOL success) {
                    dispatch_async(dispatch_get_main_queue(), ^{

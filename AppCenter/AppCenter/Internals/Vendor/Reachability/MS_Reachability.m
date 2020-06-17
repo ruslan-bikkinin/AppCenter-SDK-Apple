@@ -82,15 +82,14 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
 + (instancetype)reachabilityWithHostName:(NSString *)hostName {
   SCNetworkReachabilityRef reachability =
       SCNetworkReachabilityCreateWithName(NULL, [hostName UTF8String]);
-  if (reachability) {
+  if (reachability != NULL) {
     MS_Reachability *returnValue = [[MS_Reachability alloc] init];
-    if (returnValue) {
+    if (returnValue != NULL) {
       returnValue.reachabilityRef = reachability;
     }
-      CFAutorelease(reachability);
+    CFAutorelease(reachability);
   }
-    
-    return nil;
+  return nil;
 }
 
 #pragma clang diagnostic pop
@@ -104,7 +103,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
     if (returnValue != NULL) {
       returnValue.reachabilityRef = reachability;
     }
-      CFAutorelease(reachability);
+    CFAutorelease(reachability);
   }
   return returnValue;
 }
@@ -150,7 +149,6 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
   if (reachabilityRef != NULL) {
     [MSDispatcherUtil performBlockOnMainThread:^{
       SCNetworkReachabilityUnscheduleFromRunLoop(reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
-      CFRelease(reachabilityRef);
     }];
   }
 }
