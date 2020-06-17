@@ -82,14 +82,15 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
 + (instancetype)reachabilityWithHostName:(NSString *)hostName {
   SCNetworkReachabilityRef reachability =
       SCNetworkReachabilityCreateWithName(NULL, [hostName UTF8String]);
+  MS_Reachability *returnValue = NULL;
   if (reachability != NULL) {
-    MS_Reachability *returnValue = [[MS_Reachability alloc] init];
+    returnValue = [[MS_Reachability alloc] init];
     if (returnValue != NULL) {
       returnValue.reachabilityRef = reachability;
     }
     CFAutorelease(reachability);
   }
-  return nil;
+  return returnValue;
 }
 
 #pragma clang diagnostic pop
