@@ -86,9 +86,9 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
   if (reachability != NULL) {
     returnValue = [[MS_Reachability alloc] init];
     if (returnValue != NULL) {
-      returnValue.reachabilityRef = reachability;
+      returnValue.reachabilityRef = CFBridgingRetain((__bridge id)reachability);
     }
-    CFAutorelease(reachability);
+    CFRelease(reachability);
   }
   return returnValue;
 }
@@ -102,9 +102,9 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
   if (reachability != NULL) {
     returnValue = [[MS_Reachability alloc] init];
     if (returnValue != NULL) {
-      returnValue.reachabilityRef = reachability;
+      returnValue.reachabilityRef = CFBridgingRetain((__bridge id)reachability);
     }
-    CFAutorelease(reachability);
+    CFRelease(reachability);
   }
   return returnValue;
 }
@@ -138,14 +138,22 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
 
 - (void)stopNotifier {
   [MSDispatcherUtil performBlockOnMainThread:^{
-    if (self.reachabilityRef != NULL) {
+    if (self.reachabilityRef) {
       SCNetworkReachabilityUnscheduleFromRunLoop(
           self.reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     }
   }];
 }
 
-- (void)dealloc {}
+- (void)dealloc {
+    __block SCNetworkReachabilityRef reachabilityRef = self.reachabilityRef;
+    if (reachabilityRef) {
+      [MSDispatcherUtil performBlockOnMainThread:^{
+        SCNetworkReachabilityUnscheduleFromRunLoop(reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+        CFRelease(reachabilityRef);
+      }];
+    }
+}
 
 #pragma mark - Network Flag Handling
 
