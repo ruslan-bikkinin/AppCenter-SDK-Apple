@@ -450,7 +450,10 @@ __attribute__((used)) static void importCategories() { [NSString stringWithForma
 - (id<MSChannelUnitProtocol>)oneCollectorChannelUnit {
   if (!_oneCollectorChannelUnit) {
     NSString *oneCollectorGroupId = [NSString stringWithFormat:@"%@%@", self.groupId, kMSOneCollectorGroupIdSuffix];
-    self.oneCollectorChannelUnit = [self.channelGroup channelUnitForGroupId:oneCollectorGroupId];
+    id<MSChannelUnitProtocol> tempUnit = [self.channelGroup channelUnitForGroupId:oneCollectorGroupId];
+    if (tempUnit) {
+      self.oneCollectorChannelUnit = tempUnit;
+    }
   }
   return _oneCollectorChannelUnit;
 }
@@ -459,7 +462,10 @@ __attribute__((used)) static void importCategories() { [NSString stringWithForma
   if (!_oneCollectorCriticalChannelUnit) {
     NSString *oneCollectorCriticalGroupId =
         [NSString stringWithFormat:@"%@_%@%@", self.groupId, kMSCriticalChannelSuffix, kMSOneCollectorGroupIdSuffix];
-    self.oneCollectorCriticalChannelUnit = [self.channelGroup channelUnitForGroupId:oneCollectorCriticalGroupId];
+    id<MSChannelUnitProtocol> tempUnit = [self.channelGroup channelUnitForGroupId:oneCollectorCriticalGroupId];
+    if (tempUnit) {
+      self.oneCollectorCriticalChannelUnit = tempUnit;
+    }
   }
   return _oneCollectorCriticalChannelUnit;
 }
