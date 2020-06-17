@@ -145,14 +145,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
   }];
 }
 
-- (void)dealloc {
-  __block SCNetworkReachabilityRef reachabilityRef = self.reachabilityRef;
-  if (reachabilityRef != NULL) {
-    [MSDispatcherUtil performBlockOnMainThread:^{
-      SCNetworkReachabilityUnscheduleFromRunLoop(reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
-    }];
-  }
-}
+- (void)dealloc {}
 
 #pragma mark - Network Flag Handling
 
