@@ -80,15 +80,16 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
 #pragma clang diagnostic ignored "-Wnullable-to-nonnull-conversion"
 
 + (instancetype)reachabilityWithHostName:(NSString *)hostName {
+  MS_Reachability *returnValue = NULL;
   SCNetworkReachabilityRef reachability =
       SCNetworkReachabilityCreateWithName(NULL, [hostName UTF8String]);
-  MS_Reachability *returnValue = NULL;
   if (reachability != NULL) {
     returnValue = [[MS_Reachability alloc] init];
     if (returnValue != NULL) {
-      returnValue.reachabilityRef = CFBridgingRetain((__bridge id)reachability);
+      returnValue.reachabilityRef = reachability;
+    } else {
+      CFRelease(reachability);
     }
-    CFRelease(reachability);
   }
   return returnValue;
 }
@@ -102,9 +103,10 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
   if (reachability != NULL) {
     returnValue = [[MS_Reachability alloc] init];
     if (returnValue != NULL) {
-      returnValue.reachabilityRef = CFBridgingRetain((__bridge id)reachability);
+      returnValue.reachabilityRef = reachability;
+    } else {
+      CFRelease(reachability);
     }
-    CFRelease(reachability);
   }
   return returnValue;
 }
@@ -138,7 +140,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
 
 - (void)stopNotifier {
   [MSDispatcherUtil performBlockOnMainThread:^{
-    if (self.reachabilityRef) {
+    if (self.reachabilityRef != NULL) {
       SCNetworkReachabilityUnscheduleFromRunLoop(
           self.reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     }
@@ -147,7 +149,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target,
 
 - (void)dealloc {
     __block SCNetworkReachabilityRef reachabilityRef = self.reachabilityRef;
-    if (reachabilityRef) {
+    if (reachabilityRef != NULL) {
       [MSDispatcherUtil performBlockOnMainThread:^{
         SCNetworkReachabilityUnscheduleFromRunLoop(reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
         CFRelease(reachabilityRef);
