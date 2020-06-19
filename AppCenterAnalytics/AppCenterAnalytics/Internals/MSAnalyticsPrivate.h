@@ -44,7 +44,7 @@ static NSString *const kMSCriticalChannelSuffix = @"critical";
 /**
  * The channel unit for critical common schema logs.
  */
-@property(nonatomic) id<MSChannelUnitProtocol> oneCollectorCriticalChannelUnit;
+@property(nonatomic, nullable) id<MSChannelUnitProtocol> oneCollectorCriticalChannelUnit;
 
 /**
  * Critical events channel unit.

@@ -23,9 +23,7 @@ static int sqliteConfigurationResult = SQLITE_ERROR;
 }
 
 - (instancetype)initWithSchema:(MSDBSchema *)schema version:(NSUInteger)version filename:(NSString *)filename {
-  if (schema) {
-    _schema = schema;
-  }
+  _schema = schema;
   
   // Log SQLite configuration result only once at init time because log level won't be set at load time.
   dispatch_once(&sqliteConfigurationResultOnceToken, ^{
